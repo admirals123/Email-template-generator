@@ -965,7 +965,7 @@ async function sendToClient() {
       from_name:   '3D Virtual',
       reply_to:    'info@3dvirtual.space',
       subject:     'Enhance your listing at ' + (document.getElementById('f_address').value || '{Address}') + ' | Améliorez votre inscription au ' + (document.getElementById('f_address').value || '{Address}'),
-      message:     lastGenerated,  // HTML content — use {{{message}}} in EmailJS template
+      message:     `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.8;color:#222222;max-width:640px;">${lastGenerated}</div>`,
       client_name: document.getElementById('f_name').value,
       address:     document.getElementById('f_address').value,
       phone:       phoneField ? phoneField.value : '',
