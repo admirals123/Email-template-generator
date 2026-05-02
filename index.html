@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Email Template Manager</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -491,16 +492,17 @@
     <div class="panel" style="margin-bottom:18px;">
       <div class="panel-header">
         <div class="panel-title"><div class="dot"></div>Generated Email</div>
-        <button class="btn btn-ghost btn-sm" onclick="copyOutput()" id="copy-btn">Copy</button>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <button class="btn btn-ghost btn-sm" onclick="copyOutput()" id="copy-btn">Copy</button>
+          <button class="btn btn-success btn-sm" id="send-btn" onclick="sendToClient()">✉ Send to Client</button>
+        </div>
       </div>
       <div class="panel-body">
         <div class="output-area" id="output">
           <span class="output-placeholder">Your generated email will appear here...</span>
           <div class="copy-badge" id="copy-badge">Copied!</div>
         </div>
-        <div class="btn-row">
-          <button class="btn btn-success btn-sm" onclick="saveEntry()">💾 Save to Excel Log</button>
-        </div>
+
       </div>
     </div>
 
@@ -842,6 +844,51 @@ function resetTemplate() {
   localStorage.removeItem('savedTemplate');
   document.getElementById('tpl-saved-note').style.display = 'none';
   showToast('Restored to default template.');
+}
+
+// ── EmailJS ──
+emailjs.init('_XQgHvxruQucYAX9p');
+
+async function sendToClient() {
+  if (!lastGenerated) { showToast('Generate an email first.', 'error'); return; }
+
+  const clientEmail = document.getElementById('f_email').value.trim();
+  if (!clientEmail) { showToast('Please enter the client email address.', 'error'); return; }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(clientEmail)) { showToast('Please enter a valid client email address.', 'error'); return; }
+
+  const btn = document.getElementById('send-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Sending...';
+
+  const phoneField = customFields.find(f => f.key.toLowerCase() === 'phone');
+
+  try {
+    const res = await emailjs.send('service_qi3xlts', 'template_v9pra2r', {
+      to_email:    clientEmail,
+      to_name:     document.getElementById('f_name').value || clientEmail,
+      from_name:   '3D Virtual',
+      reply_to:    'info@3dvirtual.space',
+      subject:     'Enhance your listing at ' + (document.getElementById('f_address').value || '{Address}') + ' | Améliorez votre inscription au ' + (document.getElementById('f_address').value || '{Address}'),
+      message:     lastGenerated,
+      client_name: document.getElementById('f_name').value,
+      address:     document.getElementById('f_address').value,
+      phone:       phoneField ? phoneField.value : '',
+    });
+
+    if (res.status === 200) {
+      showToast('✓ Email sent to ' + clientEmail + '!', 'success');
+      btn.textContent = '✓ Sent!';
+      setTimeout(() => { btn.disabled = false; btn.innerHTML = '✉ Send to Client'; }, 3000);
+    } else {
+      throw new Error('Non-200 status');
+    }
+  } catch(e) {
+    showToast('Failed to send. Check EmailJS template settings.', 'error');
+    btn.disabled = false;
+    btn.innerHTML = '✉ Send to Client';
+  }
 }
 
 // ── Init ──
