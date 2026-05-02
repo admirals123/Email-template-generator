@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Email Template Manager</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f5f3ef;
+    --surface: #ffffff;
+    --surface2: #f0ede8;
+    --border: #ddd9d2;
+    --accent: #2d5a27;
+    --accent2: #4a7c43;
+    --accent-light: #e8f0e7;
+    --text: #1a1a18;
+    --text2: #5a574f;
+    --text3: #8a877f;
+    --danger: #8b2e2e;
+    --danger-light: #fdf0f0;
+    --success: #2d5a27;
+    --success-light: #e8f0e7;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.07);
+    --font: 'Sora', sans-serif;
+    --mono: 'JetBrains Mono', monospace;
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── Header ── */
+  .header {
+    background: var(--accent);
+    color: #fff;
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .header-left { display: flex; align-items: center; gap: 12px; }
+  .header-icon {
+    width: 38px; height: 38px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .header h1 { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
+  .header p { font-size: 12px; opacity: 0.7; margin-top: 1px; }
+  .header-actions { display: flex; gap: 8px; }
+
+  /* ── Layout ── */
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 24px 28px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── Panels ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .panel-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .panel-title .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  .panel-body { padding: 20px; }
+
+  /* ── Form ── */
+  .form-group { margin-bottom: 16px; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text2);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  .form-label span {
+    font-size: 10px;
+    color: var(--text3);
+    font-weight: 400;
+    margin-left: 4px;
+  }
+
+  input[type=text], textarea, select {
+    width: 100%;
+    font-family: var(--font);
+    font-size: 14px;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type=text]:focus, textarea:focus, select:focus {
+    border-color: var(--accent2);
+    box-shadow: 0 0 0 3px rgba(74,124,67,0.12);
+  }
+  textarea { resize: vertical; min-height: 120px; line-height: 1.6; }
+
+  /* greeting pills */
+  .greeting-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .g-pill {
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: var(--font);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text2);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-weight: 400;
+  }
+  .g-pill:hover { border-color: var(--accent2); color: var(--accent); }
+  .g-pill.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    font-weight: 500;
+  }
+
+  /* custom fields */
+  .custom-fields { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+  .custom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 32px;
+    gap: 6px;
+    align-items: center;
+  }
+  .custom-row input { font-size: 13px; padding: 7px 10px; }
+  .remove-btn {
+    width: 30px; height: 30px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text3);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .remove-btn:hover { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+
+  /* tags */
+  .tag-bar { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 8px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.1s;
+  }
+  .tag:hover { border-color: var(--accent2); }
+
+  /* buttons */
+  .btn {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover { background: var(--accent2); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-outline:hover { background: var(--surface2); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text2);
+    border: none;
+    padding: 7px 12px;
+  }
+  .btn-ghost:hover { background: var(--surface2); color: var(--text); }
+  .btn-sm { font-size: 12px; padding: 6px 13px; }
+  .btn-success {
+    background: var(--success);
+    color: #fff;
+    border-color: var(--success);
+  }
+  .btn-success:hover { opacity: 0.88; }
+
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+
+  /* output */
+  .output-area {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text);
+    white-space: pre-wrap;
+    min-height: 120px;
+    font-family: var(--font);
+    position: relative;
+  }
+  .output-placeholder { color: var(--text3); font-style: italic; font-size: 13px; }
+
+  .copy-badge {
+    position: absolute;
+    top: 8px; right: 8px;
+    background: var(--success);
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+  .copy-badge.show { opacity: 1; }
+
+  /* log table */
+  .log-wrap { overflow-x: auto; }
+  .log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  .log-table th {
+    text-align: left;
+    padding: 9px 12px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    color: var(--text2);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .log-table td {
+    padding: 9px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .log-table tr:last-child td { border-bottom: none; }
+  .log-table tr:hover td { background: var(--accent-light); }
+  .empty-state {
+    text-align: center;
+    padding: 36px;
+    color: var(--text3);
+    font-size: 13px;
+  }
+  .empty-icon { font-size: 28px; margin-bottom: 8px; }
+
+  .badge-count {
+    background: var(--accent);
+    color: #fff;
+    border-radius: 10px;
+    font-size: 10px;
+    padding: 2px 7px;
+    font-weight: 600;
+  }
+
+  /* toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--text);
+    color: #fff;
+    padding: 11px 18px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 500;
+    z-index: 9999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.25s cubic-bezier(.34,1.56,.64,1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+  .toast.success { background: var(--accent); }
+  .toast.error { background: var(--danger); }
+
+  /* divider */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text3);
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  .stat-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .stat-box {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .stat-num { font-size: 22px; font-weight: 600; color: var(--accent); }
+  .stat-lbl { font-size: 11px; color: var(--text3); margin-top: 2px; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <div class="header-icon">✉</div>
+    <div>
+      <h1>Email Template Manager</h1>
+      <p>Compose, replace, save — all entries logged to Excel</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <button class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,0.4);" onclick="exportExcel()">
+      ⬇ Export Excel
+    </button>
+    <button class="btn btn-outline btn-sm" style="color:#fff;border-color:rgba(255,255,255,0.4);" onclick="clearLog()">
+      Clear Log
+    </button>
+  </div>
+</div>
+
+<div class="layout">
+  <!-- LEFT: Composer -->
+  <div>
+    <!-- Template Panel -->
+    <div class="panel" style="margin-bottom:18px;">
+      <div class="panel-header">
+        <div class="panel-title"><div class="dot"></div>Email Body</div>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="form-label">Email template <span>— use {placeholders}</span></label>
+          <textarea id="template"></textarea>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <div class="section-label" style="margin-bottom:0;">Insert placeholder</div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="saveTemplate()" id="save-tpl-btn">💾 Save Template</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetTemplate()" title="Restore default template" style="font-size:11px;color:var(--text3);">↩ Reset default</button>
+          </div>
+        </div>
+        <div class="tag-bar" id="tag-bar"></div>
+        <div id="tpl-saved-note" style="font-size:11px;color:var(--text3);margin-top:6px;display:none;">✓ Template saved — loads automatically next time.</div>
+      </div>    </div>
+
+    <!-- Replacements Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="dot"></div>Replacements</div>
+        <button class="btn btn-ghost btn-sm" onclick="addCustomField()">+ Add field</button>
+      </div>
+      <div class="panel-body">
+
+        <!-- Greeting -->
+        <div class="form-group">
+          <label class="form-label">Greeting</label>
+          <div class="greeting-group" id="greeting-group">
+            <button class="g-pill" onclick="pickGreeting(this,'Good morning')">Good morning</button>
+            <button class="g-pill" onclick="pickGreeting(this,'Good afternoon')">Good afternoon</button>
+            <button class="g-pill" onclick="pickGreeting(this,'Good evening')">Good evening</button>
+            <button class="g-pill" onclick="pickGreeting(this,'Hello')">Hello</button>
+            <button class="g-pill" onclick="pickGreeting(this,'Hi')">Hi</button>
+          </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- Fixed fields -->
+        <div class="form-group">
+          <label class="form-label">Client Name</label>
+          <input type="text" id="f_name" placeholder="e.g. John Smith" oninput="renderTags()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Address</label>
+          <input type="text" id="f_address" placeholder="e.g. 123 Main Street, Montreal" oninput="renderTags()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Client Email</label>
+          <input type="text" id="f_email" placeholder="e.g. john@example.com" />
+        </div>
+
+        <hr class="divider">
+        <div class="section-label">Custom fields</div>
+
+        <!-- Dynamic fields -->
+        <div class="custom-fields" id="custom-fields"></div>
+
+        <div class="btn-row">
+          <button class="btn btn-primary" id="generate-btn" onclick="generate()">⚡ Generate Email</button>
+          <button class="btn btn-outline" onclick="copyOutput()" id="inline-copy-btn">📋 Copy Email</button>
+          <button class="btn btn-ghost" onclick="resetForm()">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Output + Log -->
+  <div>
+    <!-- Output Panel -->
+    <div class="panel" style="margin-bottom:18px;">
+      <div class="panel-header">
+        <div class="panel-title"><div class="dot"></div>Generated Email</div>
+        <button class="btn btn-ghost btn-sm" onclick="copyOutput()" id="copy-btn">Copy</button>
+      </div>
+      <div class="panel-body">
+        <div class="output-area" id="output">
+          <span class="output-placeholder">Your generated email will appear here...</span>
+          <div class="copy-badge" id="copy-badge">Copied!</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-success btn-sm" onclick="saveEntry()">💾 Save to Excel Log</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Log Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title">
+          <div class="dot"></div>Saved Entries
+          <span class="badge-count" id="count-badge">0</span>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="exportExcel()">⬇ Export .xlsx</button>
+      </div>
+      <div class="panel-body" style="padding:0;">
+        <div class="stat-row" style="padding:16px 16px 0;">
+          <div class="stat-box">
+            <div class="stat-num" id="stat-total">0</div>
+            <div class="stat-lbl">Total saved</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="stat-today">0</div>
+            <div class="stat-lbl">Today</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-num" id="stat-clients">0</div>
+            <div class="stat-lbl">Unique clients</div>
+          </div>
+        </div>
+        <div class="log-wrap" style="margin-top:14px;">
+          <div id="log-container"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ── State ──
+let greeting = '';
+let customFields = [
+  { key: 'phone', value: '' }
+];
+let log = JSON.parse(localStorage.getItem('emailLog') || '[]');
+let lastGenerated = '';
+
+// ── Greeting ──
+function pickGreeting(el, val) {
+  greeting = val;
+  document.querySelectorAll('.g-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderTags();
+}
+
+// ── Custom fields ──
+function addCustomField() {
+  customFields.push({ key: '', value: '' });
+  renderCustomFields();
+}
+function removeCustomField(i) {
+  customFields.splice(i, 1);
+  renderCustomFields();
+}
+function renderCustomFields() {
+  const c = document.getElementById('custom-fields');
+  c.innerHTML = '';
+  customFields.forEach((f, i) => {
+    const row = document.createElement('div');
+    row.className = 'custom-row';
+    row.innerHTML = `
+      <input type="text" placeholder="key (e.g. phone)" value="${f.key}"
+        style="font-family:'JetBrains Mono',monospace;font-size:12px;"
+        oninput="customFields[${i}].key=this.value;renderTags()" />
+      <input type="text" placeholder="value" value="${f.value}"
+        oninput="customFields[${i}].value=this.value" />
+      <button class="remove-btn" onclick="removeCustomField(${i})" title="Remove">×</button>
+    `;
+    c.appendChild(row);
+  });
+  renderTags();
+}
+
+// ── Tags ──
+function renderTags() {
+  const keys = [
+    'greeting', 'name', 'address',
+    ...customFields.filter(f => f.key).map(f => f.key)
+  ];
+  const bar = document.getElementById('tag-bar');
+  bar.innerHTML = keys.map(k =>
+    `<span class="tag" onclick="insertTag('{${k}}')">{${k}}</span>`
+  ).join('');
+}
+
+function insertTag(tag) {
+  const ta = document.getElementById('template');
+  const s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0, s) + tag + ta.value.slice(e);
+  ta.focus();
+  ta.selectionStart = ta.selectionEnd = s + tag.length;
+}
+
+// ── Generate ──
+async function generate() {
+  let text = document.getElementById('template').value.trim();
+  if (!text) { showToast('Paste an email template first.', 'error'); return; }
+
+  text = text.replace(/\{greeting\}/gi, greeting || '{greeting}');
+  text = text.replace(/\{name\}/gi, document.getElementById('f_name').value || '{name}');
+  text = text.replace(/\{address\}/gi, document.getElementById('f_address').value || '{address}');
+  customFields.forEach(f => {
+    if (f.key) {
+      const re = new RegExp(`\\{${escapeRe(f.key)}\\}`, 'gi');
+      text = text.replace(re, f.value || `{${f.key}}`);
+    }
+  });
+
+  lastGenerated = text;
+  const out = document.getElementById('output');
+  out.innerHTML = `<span style="white-space:pre-wrap;">${escapeHtml(text)}</span><div class="copy-badge" id="copy-badge">Copied!</div>`;
+
+  // 1. Copy to clipboard
+  try {
+    await navigator.clipboard.writeText(text);
+    const badge = document.getElementById('copy-badge');
+    if (badge) { badge.classList.add('show'); setTimeout(() => badge.classList.remove('show'), 1800); }
+  } catch(e) {}
+
+  // 2. Submit client info to Formspree
+  const phoneField = customFields.find(f => f.key.toLowerCase() === 'phone');
+  const clientData = {
+    client_name:  document.getElementById('f_name').value,
+    address:      document.getElementById('f_address').value,
+    email:        document.getElementById('f_email').value,
+    phone:        phoneField ? phoneField.value : '',
+  };
+
+  const btn = document.getElementById('generate-btn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Submitting...';
+
+  try {
+    const res = await fetch('https://formspree.io/f/mbdwddqg', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(clientData)
+    });
+    if (res.ok) {
+      showToast('✓ Email copied & client info submitted!', 'success');
+    } else {
+      showToast('Email copied. Form submit failed — check connection.', 'error');
+    }
+  } catch(e) {
+    showToast('Email copied. Could not reach form endpoint.', 'error');
+  }
+
+  btn.disabled = false;
+  btn.innerHTML = '⚡ Generate Email';
+}
+
+function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ── Copy ──
+function copyOutput() {
+  if (!lastGenerated) { showToast('Generate an email first.', 'error'); return; }
+  navigator.clipboard.writeText(lastGenerated).then(() => {
+    const badge = document.getElementById('copy-badge');
+    if (badge) { badge.classList.add('show'); setTimeout(() => badge.classList.remove('show'), 1800); }
+    const btn = document.getElementById('inline-copy-btn');
+    if (btn) { btn.textContent = '✓ Copied!'; setTimeout(() => btn.textContent = '📋 Copy Email', 2000); }
+    showToast('Copied to clipboard!', 'success');
+  });
+}
+
+// ── Save entry ──
+function saveEntry() {
+  if (!lastGenerated) { showToast('Generate an email first.', 'error'); return; }
+
+  const extra = {};
+  customFields.forEach(f => { if (f.key) extra[f.key] = f.value; });
+
+  const entry = {
+    id: log.length + 1,
+    timestamp: new Date().toLocaleString(),
+    date: new Date().toLocaleDateString(),
+    greeting,
+    client_name: document.getElementById('f_name').value,
+    address: document.getElementById('f_address').value,
+    ...extra,
+    email_body: lastGenerated
+  };
+
+  log.push(entry);
+  localStorage.setItem('emailLog', JSON.stringify(log));
+  renderLog();
+  showToast('Saved to log! Export Excel to download.', 'success');
+}
+
+// ── Render log ──
+function renderLog() {
+  const container = document.getElementById('log-container');
+  document.getElementById('count-badge').textContent = log.length;
+  document.getElementById('stat-total').textContent = log.length;
+
+  const today = new Date().toLocaleDateString();
+  document.getElementById('stat-today').textContent = log.filter(e => e.date === today).length;
+  const unique = new Set(log.map(e => e.client_name).filter(Boolean));
+  document.getElementById('stat-clients').textContent = unique.size;
+
+  if (log.length === 0) {
+    container.innerHTML = `<div class="empty-state"><div class="empty-icon">📋</div>No entries saved yet.<br>Generate and save an email to begin.</div>`;
+    return;
+  }
+
+  const recent = [...log].reverse().slice(0, 12);
+  container.innerHTML = `<table class="log-table">
+    <thead><tr>
+      <th>#</th><th>Time</th><th>Client</th><th>Greeting</th><th>Address</th><th>Preview</th>
+    </tr></thead>
+    <tbody>${recent.map(e => `<tr>
+      <td>${e.id}</td>
+      <td>${e.timestamp}</td>
+      <td>${e.client_name || '—'}</td>
+      <td>${e.greeting || '—'}</td>
+      <td>${e.address || '—'}</td>
+      <td style="color:var(--text3);font-style:italic;">${(e.email_body||'').slice(0,40)}…</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ── Export Excel ──
+function exportExcel() {
+  if (log.length === 0) { showToast('No entries to export yet.', 'error'); return; }
+
+  const wb = XLSX.utils.book_new();
+
+  // Sheet 1: Log
+  const rows = log.map(e => ({
+    'ID': e.id,
+    'Timestamp': e.timestamp,
+    'Date': e.date,
+    'Greeting': e.greeting,
+    'Client Name': e.client_name,
+    'Address': e.address,
+    ...Object.fromEntries(
+      Object.entries(e).filter(([k]) =>
+        !['id','timestamp','date','greeting','client_name','address','email_body'].includes(k)
+      )
+    ),
+    'Email Body': e.email_body
+  }));
+
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // Column widths
+  ws['!cols'] = [
+    { wch: 5 }, { wch: 20 }, { wch: 12 }, { wch: 16 },
+    { wch: 20 }, { wch: 30 }, { wch: 60 }
+  ];
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Email Log');
+
+  // Sheet 2: Summary
+  const today = new Date().toLocaleDateString();
+  const summaryData = [
+    ['Summary', ''],
+    ['Total Emails Saved', log.length],
+    ['Saved Today', log.filter(e => e.date === today).length],
+    ['Unique Clients', new Set(log.map(e => e.client_name).filter(Boolean)).size],
+    ['Export Date', new Date().toLocaleString()],
+  ];
+  const ws2 = XLSX.utils.aoa_to_sheet(summaryData);
+  ws2['!cols'] = [{ wch: 24 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
+
+  const fname = `email_log_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(wb, fname);
+  showToast(`Exported: ${fname}`, 'success');
+}
+
+// ── Clear ──
+function clearLog() {
+  if (log.length === 0) return;
+  if (!confirm('Clear all saved entries? This cannot be undone.')) return;
+  log = [];
+  localStorage.setItem('emailLog', JSON.stringify(log));
+  renderLog();
+  showToast('Log cleared.');
+}
+
+function resetForm() {
+  document.getElementById('f_name').value = '';
+  document.getElementById('f_address').value = '';
+  greeting = '';
+  customFields = [{ key: 'phone', value: '' }];
+  document.querySelectorAll('.g-pill').forEach(b => b.classList.remove('active'));
+  lastGenerated = '';
+  document.getElementById('output').innerHTML = '<span class="output-placeholder">Your generated email will appear here...</span><div class="copy-badge" id="copy-badge">Copied!</div>';
+  renderCustomFields();
+  showToast('Fields cleared — template kept.');
+}
+
+// ── Toast ──
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ── Default template ──
+const DEFAULT_TEMPLATE = `{greeting},
+
+Dear {name},
+
+We are writing regarding your property at {address}.
+
+Please do not hesitate to contact us at {phone} at your earliest convenience. We would be happy to assist you with any questions or concerns.
+
+We look forward to hearing from you.
+
+Best regards,
+[Your Name]`;
+
+function saveTemplate() {
+  const val = document.getElementById('template').value;
+  localStorage.setItem('savedTemplate', val);
+  document.getElementById('tpl-saved-note').style.display = 'block';
+  const btn = document.getElementById('save-tpl-btn');
+  btn.textContent = '✓ Saved!';
+  setTimeout(() => { btn.textContent = '💾 Save Template'; }, 2000);
+  showToast('Template saved — loads automatically next time.', 'success');
+}
+
+function resetTemplate() {
+  document.getElementById('template').value = DEFAULT_TEMPLATE;
+  localStorage.removeItem('savedTemplate');
+  document.getElementById('tpl-saved-note').style.display = 'none';
+  showToast('Restored to default template.');
+}
+
+// ── Init ──
+const savedTpl = localStorage.getItem('savedTemplate');
+document.getElementById('template').value = savedTpl || DEFAULT_TEMPLATE;
+if (savedTpl) document.getElementById('tpl-saved-note').style.display = 'block';
+
+let tplTimer;
+document.getElementById('template').addEventListener('input', () => {
+  clearTimeout(tplTimer);
+  tplTimer = setTimeout(() => {
+    localStorage.setItem('savedTemplate', document.getElementById('template').value);
+  }, 800);
+});
+
+renderCustomFields();
+renderLog();
+</script>
+</body>
+</html>
