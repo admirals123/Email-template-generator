@@ -677,6 +677,7 @@ async function generate() {
     }
   });
 
+  text = cleanHtml(text);
   lastGenerated = text;
 
   // Show HTML output
@@ -728,6 +729,41 @@ async function generate() {
 }
 
 function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+// ── Clean HTML before sending ──
+function cleanHtml(html) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+
+  // Remove all attributes except style, href, target on allowed tags
+  const allowedAttrs = ['style', 'href', 'target'];
+  tmp.querySelectorAll('*').forEach(el => {
+    // Remove disallowed tags entirely (keep content)
+    const tag = el.tagName.toLowerCase();
+    if (['response-element', 'link-block', 'script', 'style'].includes(tag)) {
+      el.replaceWith(...el.childNodes);
+      return;
+    }
+    // Strip all non-essential attributes
+    [...el.attributes].forEach(attr => {
+      if (!allowedAttrs.includes(attr.name)) {
+        el.removeAttribute(attr.name);
+      }
+    });
+    // Clean inline styles — only keep font-weight, font-style, text-decoration, text-align, color
+    if (el.style && el.style.cssText) {
+      const allowed = ['font-weight','font-style','text-decoration','text-align','color'];
+      const kept = allowed
+        .filter(p => el.style.getPropertyValue(p))
+        .map(p => `${p}:${el.style.getPropertyValue(p)}`)
+        .join(';');
+      if (kept) el.setAttribute('style', kept);
+      else el.removeAttribute('style');
+    }
+  });
+
+  return tmp.innerHTML;
+}
 function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ── Copy ──
