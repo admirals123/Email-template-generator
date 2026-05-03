@@ -943,122 +943,180 @@ function resetTemplate() {
 
 // ── Email HTML builder ──
 function buildEmailHtml(body, clientName) {
-  return `<!DOCTYPE html>
-<html lang="en">
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>3D Virtuals</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="x-apple-disable-message-reformatting">
+<style>
+  body{margin:0;padding:0}
+  table{mso-table-lspace:0;mso-table-rspace:0}
+  p,span,h1,h2,h3,h4,h5,h6{margin:0;padding:0}
+  p{line-height:inherit}
+  a[x-apple-data-detectors]{color:inherit!important;text-decoration:inherit!important}
+  #MessageViewBody a{color:inherit;text-decoration:none}
+  @media(max-width:550px){
+    .main-title{font-size:22px!important}
+    .sub-title{font-size:17px!important}
+  }
+</style>
 </head>
-<body style="margin:0;padding:0;background-color:#0d0d0d;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+<body style="width:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%;background-color:#f0f1f5;margin:0;padding:0">
 
-<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0d0d0d;padding:40px 16px;">
-<tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f0f1f5" style="background-color:#f0f1f5">
+<tbody><tr><td style="background-color:#f0f1f5">
 
-  <!-- TOP LOGO BAR -->
-  <tr>
-    <td style="background-color:#0d0d0d;padding:0 0 2px 0;text-align:center;border-radius:16px 16px 0 0;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td style="background-color:#111111;border:1px solid #1f1f1f;border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
-            <div style="font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-1px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">3D<span style="color:#4ade80;">Virtuals</span></div>
-            <div style="font-size:11px;color:#555555;letter-spacing:3px;text-transform:uppercase;margin-top:6px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Visites Virtuelles · Montréal</div>
-          </td>
-        </tr>
-      </table>
+<table align="center" width="100%" border="0" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto;background-color:#f6f6f5">
+<tbody>
+
+<!-- HEADER -->
+<tr><td>
+  <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;background-color:#a26921">
+  <tbody><tr>
+    <td style="text-align:center;padding:16px 24px">
+      <table border="0" cellpadding="0" cellspacing="0" style="width:100%;max-width:538px;margin:0 auto">
+      <tbody><tr>
+        <td style="vertical-align:middle;background-color:#a26921;width:44px">
+          <table border="0" cellpadding="0" cellspacing="0" style="width:100%"><tbody><tr>
+            <td style="width:44px;height:44px;background-color:rgba(255,255,255,0.15);border-radius:8px;text-align:center;vertical-align:middle;font-size:22px;line-height:44px;">🏠</td>
+          </tr></tbody></table>
+        </td>
+        <td width="16" style="width:16px;font-size:0">&nbsp;</td>
+        <td style="vertical-align:middle;background-color:#a26921">
+          <table border="0" cellpadding="0" cellspacing="0" style="width:100%"><tbody><tr>
+            <td style="color:#ede7db;font-size:20px;font-weight:700;font-family:Helvetica,Arial,sans-serif;text-align:left;line-height:1.2">
+              3D Virtuals
+              <div style="font-size:12px;font-weight:400;color:rgba(237,231,219,0.75);letter-spacing:1px;text-transform:uppercase;margin-top:3px;">Visites Virtuelles · Montréal</div>
+            </td>
+          </tr></tbody></table>
+        </td>
+        <td style="vertical-align:middle;text-align:right;background-color:#a26921">
+          <div style="display:inline-block;background:rgba(255,255,255,0.15);border-radius:20px;padding:5px 14px;font-size:12px;color:#ede7db;font-family:Helvetica,Arial,sans-serif;white-space:nowrap;">✦ 8K · 24h · Google Maps</div>
+        </td>
+      </tr></tbody></table>
     </td>
-  </tr>
-
-  <!-- GREEN ACCENT LINE -->
-  <tr>
-    <td style="padding:0;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td style="background:linear-gradient(90deg,#16a34a,#4ade80,#16a34a);height:2px;font-size:0;line-height:0;">&nbsp;</td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-
-  <!-- FEATURE BADGES -->
-  <tr>
-    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:14px 40px;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td align="center">
-            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ 8K Ultra HD</span>
-            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ 24h Delivery</span>
-            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ Google Street View</span>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-
-  <!-- DIVIDER -->
-  <tr>
-    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:0 40px;">
-      <div style="border-top:1px solid #1f1f1f;font-size:0;line-height:0;">&nbsp;</div>
-    </td>
-  </tr>
-
-  <!-- BODY CONTENT -->
-  <tr>
-    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:32px 40px 36px;">
-      <div style="font-size:15px;line-height:1.9;color:#d4d4d4;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
-        ${body}
-      </div>
-    </td>
-  </tr>
-
-  <!-- DIVIDER -->
-  <tr>
-    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:0 40px;">
-      <div style="border-top:1px solid #1f1f1f;font-size:0;line-height:0;">&nbsp;</div>
-    </td>
-  </tr>
-
-  <!-- CTA -->
-  <tr>
-    <td style="background-color:#0a1f11;border-left:1px solid #166534;border-right:1px solid #166534;padding:28px 40px;text-align:center;">
-      <div style="font-size:13px;color:#86efac;margin-bottom:16px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.3px;">Ready to stand out on the market? See our work.</div>
-      <a href="https://3dvirtual.space" style="display:inline-block;background-color:#16a34a;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:8px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.3px;">View Portfolio &amp; Book →</a>
-      <div style="margin-top:12px;">
-        <a href="https://my.matterport.com/show/?m=WrB6roqj1nL" style="font-size:12px;color:#4ade80;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">↗ View Sample 3D Walkthrough</a>
-      </div>
-    </td>
-  </tr>
-
-  <!-- FOOTER -->
-  <tr>
-    <td style="background-color:#0a0a0a;border:1px solid #1f1f1f;border-top:2px solid #16a34a;border-radius:0 0 16px 16px;padding:24px 40px;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td style="vertical-align:top;">
-            <div style="font-size:14px;font-weight:700;color:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Prashanth</div>
-            <div style="font-size:12px;color:#555555;margin-top:3px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Founder · 3D Virtuals</div>
-            <div style="font-size:12px;color:#555555;margin-top:2px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Côte Saint-Luc, Montréal</div>
-          </td>
-          <td align="right" style="vertical-align:top;">
-            <div style="margin-bottom:5px;"><a href="https://3dvirtual.space" style="font-size:12px;color:#4ade80;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">🌐 3dvirtual.space</a></div>
-            <div style="margin-bottom:5px;"><a href="tel:+15149191875" style="font-size:12px;color:#888888;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">📞 (514) 919-1875</a></div>
-            <div><a href="mailto:info@3dvirtual.space" style="font-size:12px;color:#888888;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">✉ info@3dvirtual.space</a></div>
-          </td>
-        </tr>
-        <tr>
-          <td colspan="2" style="padding-top:16px;border-top:1px solid #1f1f1f;margin-top:16px;">
-            <div style="font-size:11px;color:#333333;text-align:center;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">© 2026 3D Virtuals · 6565 Kildare, Côte Saint-Luc, Montréal, QC · <a href="mailto:info@3dvirtual.space" style="color:#333333;text-decoration:none;">Unsubscribe</a></div>
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>
-
-</table>
+  </tr></tbody></table>
 </td></tr>
+
+<!-- HERO TITLE -->
+<tr><td style="padding:28px 24px 8px">
+  <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0">
+  <tbody>
+    <tr><td class="main-title" style="color:#000000;font-size:26px;font-weight:700;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0 24px 14px;line-height:1.35">
+      Enhance Your Listing with a 3D Virtual Tour
+    </td></tr>
+    <tr><td style="color:#333333;font-size:15px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0 24px 20px;line-height:1.6">
+      I noticed your listing at <strong>{address}</strong> on Centris and wanted to reach out with a solution that helps properties sell faster and attract more serious buyers.
+    </td></tr>
+  </tbody>
+  </table>
+</td></tr>
+
+<!-- MAIN CARD -->
+<tr><td style="padding:0 24px 20px">
+  <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;border-radius:14px;background-color:#ede7db">
+  <tbody><tr><td style="padding:36px 40px">
+    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr><td class="sub-title" style="color:#000000;font-size:18px;font-weight:700;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0 0 16px;line-height:1.4">
+        Immersive 8K Matterport Digital Twins
+      </td></tr>
+      <tr><td style="color:#333333;font-size:15px;font-family:Helvetica,Arial,sans-serif;text-align:center;line-height:1.65;padding-bottom:24px">
+        ${body}
+      </td></tr>
+    </tbody>
+    </table>
+  </td></tr></tbody>
+  </table>
+</td></tr>
+
+<!-- FEATURES 2-COL -->
+<tr><td style="padding:0 24px 20px">
+  <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%">
+  <tbody><tr>
+    <td style="width:48%;vertical-align:top;padding:10px 8px 10px 0">
+      <table width="100%" cellpadding="0" cellspacing="0"><tbody>
+        <tr><td style="font-size:15px;color:#000;font-family:Helvetica,Arial,sans-serif;line-height:1.5;padding-bottom:10px">
+          <span style="color:#a26921;font-weight:700">✦ 24/7 Open House</span><br>
+          <span style="color:#444">Virtual tours available anytime, anywhere.</span>
+        </td></tr>
+        <tr><td style="font-size:15px;color:#000;font-family:Helvetica,Arial,sans-serif;line-height:1.5">
+          <span style="color:#a26921;font-weight:700">✦ Reduce Time on Market</span><br>
+          <span style="color:#444">Attract serious buyers faster.</span>
+        </td></tr>
+      </tbody></table>
+    </td>
+    <td width="13" style="width:13px;font-size:0">&nbsp;</td>
+    <td style="width:48%;vertical-align:top;padding:10px 0 10px 8px">
+      <table width="100%" cellpadding="0" cellspacing="0"><tbody>
+        <tr><td style="font-size:15px;color:#000;font-family:Helvetica,Arial,sans-serif;line-height:1.5;padding-bottom:10px">
+          <span style="color:#a26921;font-weight:700">✦ Increase Engagement</span><br>
+          <span style="color:#444">Capture more qualified leads.</span>
+        </td></tr>
+        <tr><td style="font-size:15px;color:#000;font-family:Helvetica,Arial,sans-serif;line-height:1.5">
+          <span style="color:#a26921;font-weight:700">✦ Google Street View</span><br>
+          <span style="color:#444">Boost your local SEO visibility.</span>
+        </td></tr>
+      </tbody></table>
+    </td>
+  </tr></tbody>
+  </table>
+</td></tr>
+
+<!-- TESTIMONIAL -->
+<tr><td style="padding:0 24px 20px">
+  <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;border-radius:14px;background-color:#ede7db">
+  <tbody><tr><td style="padding:28px 36px">
+    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+      <td style="color:#333333;font-size:15px;font-family:Helvetica,Arial,sans-serif;text-align:center;line-height:1.6;font-style:italic">
+        "The 3D Virtual tour completely transformed how we showcased the property. We received serious offers within days!" <br>
+        <span style="font-style:normal;font-weight:700;color:#a26921;font-size:13px;">— Recent Client, Montréal Realtor</span>
+      </td>
+    </tr></tbody></table>
+  </td></tr></tbody>
+  </table>
+</td></tr>
+
+<!-- CTA -->
+<tr><td style="padding:4px 24px 28px;text-align:center">
+  <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tbody>
+    <tr><td style="color:#333333;font-size:15px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0 24px 18px;line-height:1.6">
+      Ready to give your listing the competitive edge it deserves?
+    </td></tr>
+    <tr><td align="center" style="padding-bottom:12px">
+      <a href="https://3dvirtual.space" style="display:inline-block;background-color:#a26921;color:#ffffff;font-size:15px;font-weight:700;text-decoration:none;padding:14px 40px;border-radius:8px;font-family:Helvetica,Arial,sans-serif;letter-spacing:0.3px">View Portfolio &amp; Book →</a>
+    </td></tr>
+    <tr><td align="center">
+      <a href="https://my.matterport.com/show/?m=WrB6roqj1nL" style="font-size:13px;color:#a26921;text-decoration:none;font-family:Helvetica,Arial,sans-serif;">↗ View Sample 3D Walkthrough</a>
+    </td></tr>
+  </tbody></table>
+</td></tr>
+
+<!-- FOOTER -->
+<tr><td>
+  <table border="0" cellpadding="0" cellspacing="0" align="center" style="width:100%;background-color:#18191a">
+  <tbody><tr><td style="padding:22px 24px">
+    <table align="center" width="100%" border="0" cellpadding="0" cellspacing="0"><tbody><tr>
+      <td style="color:#ffffff;font-size:11px;font-family:Helvetica,Arial,sans-serif;text-align:center;line-height:1.8">
+        <strong style="font-size:13px;color:#ede7db">Prashanth</strong> · Founder, 3D Virtuals · Côte Saint-Luc, Montréal<br>
+        📞 <a href="tel:+15149191875" style="color:#cccccc;text-decoration:none">(514) 919-1875</a>
+        &nbsp;·&nbsp;
+        🌐 <a href="https://3dvirtual.space/" style="color:#cccccc;text-decoration:none">3dvirtual.space</a>
+        &nbsp;·&nbsp;
+        ✉ <a href="mailto:info@3dvirtual.space" style="color:#cccccc;text-decoration:none">info@3dvirtual.space</a><br>
+        <span style="color:#555555;font-size:10px">© 2026 3D Virtuals. All rights reserved.</span>
+      </td>
+    </tr></tbody></table>
+  </td></tr></tbody>
+  </table>
+</td></tr>
+
+</tbody>
 </table>
 
+</td></tr></tbody></table>
 </body>
 </html>`;
 }
