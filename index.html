@@ -768,36 +768,29 @@ async function generate() {
     if (badge) { badge.classList.add('show'); setTimeout(() => badge.classList.remove('show'), 1800); }
   } catch(e) {}
 
-  // 2. Submit client info to Formspree
-  const phoneField = customFields.find(f => f.key.toLowerCase() === 'phone');
+  // Submit client info to Formspree
+  const phoneField2 = customFields.find(f => f.key.toLowerCase() === 'phone');
   const clientData = {
-    client_name:  document.getElementById('f_name').value,
-    address:      document.getElementById('f_address').value,
-    email:        document.getElementById('f_email').value,
-    phone:        phoneField ? phoneField.value : '',
+    client_name: document.getElementById('f_name').value,
+    address:     document.getElementById('f_address').value,
+    email:       document.getElementById('f_email').value,
+    phone:       phoneField2 ? phoneField2.value : '',
   };
 
-  const btn = document.getElementById('generate-btn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Submitting...';
-
   try {
-    const res = await fetch('https://formspree.io/f/mbdwddqg', {
-      method: 'POST',
+    const formRes = await fetch('https://formspree.io/f/mbdwddqg', {
+      method:  'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify(clientData)
+      body:    JSON.stringify(clientData)
     });
-    if (res.ok) {
-      showToast('✓ Email copied & client info submitted!', 'success');
+    if (formRes.ok) {
+      showToast('✓ Email generated & copied!', 'success');
     } else {
       showToast('Email copied. Form submit failed — check connection.', 'error');
     }
   } catch(e) {
     showToast('Email copied. Could not reach form endpoint.', 'error');
   }
-
-  btn.disabled = false;
-  btn.innerHTML = '⚡ Generate Email';
 }
 
 function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
