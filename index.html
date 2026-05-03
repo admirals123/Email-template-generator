@@ -1061,7 +1061,7 @@ function buildEmailHtml(body, clientName, address) {
           <table border="0" cellpadding="0" cellspacing="0" style="width:100%"><tbody><tr>
             <td style="color:#ede7db;font-size:20px;font-weight:700;font-family:Helvetica,Arial,sans-serif;text-align:left;line-height:1.2">
               <a href="https://3dvirtual.space/" target="_blank" style="color:#ede7db;text-decoration:none;">3D Virtuals</a>
-              <div style="font-size:12px;font-weight:400;color:rgba(237,231,219,0.75);letter-spacing:1px;text-transform:uppercase;margin-top:3px;"></div>
+              <div style="font-size:12px;font-weight:400;color:rgba(237,231,219,0.75);letter-spacing:1px;text-transform:uppercase;margin-top:3px;">Visites Virtuelles · Montréal</div>
             </td>
           </tr></tbody></table>
         </td>
@@ -1257,6 +1257,16 @@ async function sendToClient() {
 
       showToast('✓ Email sent to ' + clientEmail + '!', 'success');
       btn.textContent = '✓ Sent!';
+
+      // Clear client fields after successful send
+      document.getElementById('f_name').value = '';
+      document.getElementById('f_address').value = '';
+      document.getElementById('f_email').value = '';
+      customFields = [{ key: 'phone', value: '' }];
+      greeting = '';
+      document.querySelectorAll('.g-pill').forEach(b => b.classList.remove('active'));
+      renderCustomFields();
+
       setTimeout(() => { btn.disabled = false; btn.innerHTML = '✉ Send to Client'; }, 3000);
     } else {
       throw new Error(data.error || 'Server error');
