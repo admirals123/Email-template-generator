@@ -942,7 +942,7 @@ function resetTemplate() {
 }
 
 // ── Email HTML builder ──
-function buildEmailHtml(body, clientName) {
+function buildEmailHtml(body, clientName, address) {
   return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
@@ -1008,7 +1008,7 @@ function buildEmailHtml(body, clientName) {
       Enhance Your Listing with a 3D Virtual Tour
     </td></tr>
     <tr><td style="color:#333333;font-size:15px;font-family:Helvetica,Arial,sans-serif;text-align:center;padding:0 24px 20px;line-height:1.6">
-      I noticed your listing at <strong>{address}</strong> on Centris and wanted to reach out with a solution that helps properties sell faster and attract more serious buyers.
+      I noticed your listing at <strong>${address || 'your property'}</strong> on Centris and wanted to reach out with a solution that helps properties sell faster and attract more serious buyers.
     </td></tr>
   </tbody>
   </table>
@@ -1146,7 +1146,7 @@ async function sendToClient() {
       from_name:   '3D Virtual',
       reply_to:    'info@3dvirtual.space',
       subject:     'Enhance your listing at ' + (document.getElementById('f_address').value || '{Address}') + ' | Améliorez votre inscription au ' + (document.getElementById('f_address').value || '{Address}'),
-      message:     buildEmailHtml(lastGenerated, document.getElementById('f_name').value),
+      message:     buildEmailHtml(lastGenerated, document.getElementById('f_name').value, document.getElementById('f_address').value),
       client_name: document.getElementById('f_name').value,
       address:     document.getElementById('f_address').value,
       phone:       phoneField ? phoneField.value : '',
