@@ -428,56 +428,8 @@
 <div class="layout">
   <!-- LEFT: Composer -->
   <div>
-    <!-- Template Panel -->
-    <div class="panel" style="margin-bottom:18px;">
-      <div class="panel-header">
-        <div class="panel-title"><div class="dot"></div>Email Body</div>
-      </div>
-      <div class="panel-body">
-        <div class="form-group">
-          <label class="form-label">Email template <span>— use {placeholders}</span></label>
-          <!-- Formatting toolbar -->
-          <div id="toolbar" style="display:flex;gap:4px;flex-wrap:wrap;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius-sm) var(--radius-sm) 0 0;">
-            <button class="fmt-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
-            <button class="fmt-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
-            <button class="fmt-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
-            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
-            <button class="fmt-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">☰</button>
-            <button class="fmt-btn" onclick="fmt('insertOrderedList')" title="Numbered list">1.</button>
-            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
-            <button class="fmt-btn" onclick="fmt('justifyLeft')" title="Align left">⬅</button>
-            <button class="fmt-btn" onclick="fmt('justifyCenter')" title="Center">↔</button>
-            <button class="fmt-btn" onclick="fmt('justifyRight')" title="Align right">➡</button>
-            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
-            <select onchange="fmt('fontSize', this.value);this.value=''" style="font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);cursor:pointer;">
-              <option value="">Size</option>
-              <option value="1">Small</option>
-              <option value="3">Normal</option>
-              <option value="5">Large</option>
-              <option value="7">Huge</option>
-            </select>
-          </div>
-          <!-- Editable div instead of textarea -->
-          <div id="template" contenteditable="true"
-            style="min-height:160px;padding:10px 12px;border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);background:var(--bg);font-size:14px;line-height:1.7;color:var(--text);outline:none;overflow-y:auto;font-family:var(--font);"
-            oninput="onTemplateInput()"
-            onfocus="this.style.borderColor='var(--accent2)';this.style.boxShadow='0 0 0 3px rgba(74,124,67,0.12)'"
-            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-          <div class="section-label" style="margin-bottom:0;">Insert placeholder</div>
-          <div style="display:flex;gap:6px;">
-            <button class="btn btn-outline btn-sm" onclick="saveTemplate()" id="save-tpl-btn">💾 Save Template</button>
-            <button class="btn btn-ghost btn-sm" onclick="resetTemplate()" title="Restore default template" style="font-size:11px;color:var(--text3);">↩ Reset default</button>
-          </div>
-        </div>
-        <div class="tag-bar" id="tag-bar"></div>
-        <div id="tpl-saved-note" style="font-size:11px;color:var(--text3);margin-top:6px;display:none;">✓ Template saved — loads automatically next time.</div>
-      </div>    </div>
-
     <!-- Replacements Panel -->
-    <div class="panel">
+    <div class="panel" style="margin-bottom:18px;">
       <div class="panel-header">
         <div class="panel-title"><div class="dot"></div>Replacements</div>
         <button class="btn btn-ghost btn-sm" onclick="addCustomField()">+ Add field</button>
@@ -523,6 +475,55 @@
           <button class="btn btn-outline" onclick="copyOutput()" id="inline-copy-btn">📋 Copy Email</button>
           <button class="btn btn-ghost" onclick="resetForm()">Reset</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Template Panel -->
+    <div class="panel">
+      <div class="panel-header">
+        <div class="panel-title"><div class="dot"></div>Email Body</div>
+      </div>
+      <div class="panel-body">
+        <div class="form-group">
+          <label class="form-label">Email template <span>— use {placeholders}</span></label>
+          <!-- Formatting toolbar -->
+          <div id="toolbar" style="display:flex;gap:4px;flex-wrap:wrap;padding:6px 8px;background:var(--surface2);border:1px solid var(--border);border-bottom:none;border-radius:var(--radius-sm) var(--radius-sm) 0 0;">
+            <button class="fmt-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
+            <button class="fmt-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
+            <button class="fmt-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
+            <button class="fmt-btn" onclick="fmt('insertUnorderedList')" title="Bullet list">☰</button>
+            <button class="fmt-btn" onclick="fmt('insertOrderedList')" title="Numbered list">1.</button>
+            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
+            <button class="fmt-btn" onclick="fmt('justifyLeft')" title="Align left">⬅</button>
+            <button class="fmt-btn" onclick="fmt('justifyCenter')" title="Center">↔</button>
+            <button class="fmt-btn" onclick="fmt('justifyRight')" title="Align right">➡</button>
+            <div style="width:1px;background:var(--border);margin:2px 4px;"></div>
+            <select onchange="fmt('fontSize', this.value);this.value=''" style="font-size:12px;padding:3px 6px;border:1px solid var(--border);border-radius:4px;background:var(--bg);color:var(--text);cursor:pointer;">
+              <option value="">Size</option>
+              <option value="1">Small</option>
+              <option value="3">Normal</option>
+              <option value="5">Large</option>
+              <option value="7">Huge</option>
+            </select>
+          </div>
+          <!-- Editable div instead of textarea -->
+          <div id="template" contenteditable="true"
+            style="min-height:160px;padding:10px 12px;border:1px solid var(--border);border-radius:0 0 var(--radius-sm) var(--radius-sm);background:var(--bg);font-size:14px;line-height:1.7;color:var(--text);outline:none;overflow-y:auto;font-family:var(--font);"
+            oninput="onTemplateInput()"
+            onfocus="this.style.borderColor='var(--accent2)';this.style.boxShadow='0 0 0 3px rgba(74,124,67,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'">
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+          <div class="section-label" style="margin-bottom:0;">Insert placeholder</div>
+          <div style="display:flex;gap:6px;">
+            <button class="btn btn-outline btn-sm" onclick="saveTemplate()" id="save-tpl-btn">💾 Save Template</button>
+            <button class="btn btn-ghost btn-sm" onclick="resetTemplate()" title="Restore default template" style="font-size:11px;color:var(--text3);">↩ Reset default</button>
+          </div>
+        </div>
+        <div class="tag-bar" id="tag-bar"></div>
+        <div id="tpl-saved-note" style="font-size:11px;color:var(--text3);margin-top:6px;display:none;">✓ Template saved — loads automatically next time.</div>
       </div>
     </div>
   </div>
@@ -940,6 +941,128 @@ function resetTemplate() {
   showToast('Restored to default template.');
 }
 
+// ── Email HTML builder ──
+function buildEmailHtml(body, clientName) {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>3D Virtuals</title>
+</head>
+<body style="margin:0;padding:0;background-color:#0d0d0d;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+
+<table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0d0d0d;padding:40px 16px;">
+<tr><td align="center">
+<table width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;width:100%;">
+
+  <!-- TOP LOGO BAR -->
+  <tr>
+    <td style="background-color:#0d0d0d;padding:0 0 2px 0;text-align:center;border-radius:16px 16px 0 0;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="background-color:#111111;border:1px solid #1f1f1f;border-radius:16px 16px 0 0;padding:28px 40px 24px;text-align:center;">
+            <div style="font-size:28px;font-weight:800;color:#ffffff;letter-spacing:-1px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">3D<span style="color:#4ade80;">Virtuals</span></div>
+            <div style="font-size:11px;color:#555555;letter-spacing:3px;text-transform:uppercase;margin-top:6px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Visites Virtuelles · Montréal</div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- GREEN ACCENT LINE -->
+  <tr>
+    <td style="padding:0;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="background:linear-gradient(90deg,#16a34a,#4ade80,#16a34a);height:2px;font-size:0;line-height:0;">&nbsp;</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- FEATURE BADGES -->
+  <tr>
+    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:14px 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td align="center">
+            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ 8K Ultra HD</span>
+            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ 24h Delivery</span>
+            <span style="display:inline-block;background-color:#0d2818;border:1px solid #166534;border-radius:20px;padding:5px 14px;font-size:11px;color:#4ade80;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin:2px 4px;">✦ Google Street View</span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- DIVIDER -->
+  <tr>
+    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:0 40px;">
+      <div style="border-top:1px solid #1f1f1f;font-size:0;line-height:0;">&nbsp;</div>
+    </td>
+  </tr>
+
+  <!-- BODY CONTENT -->
+  <tr>
+    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:32px 40px 36px;">
+      <div style="font-size:15px;line-height:1.9;color:#d4d4d4;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">
+        ${body}
+      </div>
+    </td>
+  </tr>
+
+  <!-- DIVIDER -->
+  <tr>
+    <td style="background-color:#111111;border-left:1px solid #1f1f1f;border-right:1px solid #1f1f1f;padding:0 40px;">
+      <div style="border-top:1px solid #1f1f1f;font-size:0;line-height:0;">&nbsp;</div>
+    </td>
+  </tr>
+
+  <!-- CTA -->
+  <tr>
+    <td style="background-color:#0a1f11;border-left:1px solid #166534;border-right:1px solid #166534;padding:28px 40px;text-align:center;">
+      <div style="font-size:13px;color:#86efac;margin-bottom:16px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.3px;">Ready to stand out on the market? See our work.</div>
+      <a href="https://3dvirtual.space" style="display:inline-block;background-color:#16a34a;color:#ffffff;font-size:14px;font-weight:700;text-decoration:none;padding:13px 36px;border-radius:8px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;letter-spacing:0.3px;">View Portfolio &amp; Book →</a>
+      <div style="margin-top:12px;">
+        <a href="https://my.matterport.com/show/?m=WrB6roqj1nL" style="font-size:12px;color:#4ade80;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">↗ View Sample 3D Walkthrough</a>
+      </div>
+    </td>
+  </tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td style="background-color:#0a0a0a;border:1px solid #1f1f1f;border-top:2px solid #16a34a;border-radius:0 0 16px 16px;padding:24px 40px;">
+      <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+          <td style="vertical-align:top;">
+            <div style="font-size:14px;font-weight:700;color:#ffffff;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Prashanth</div>
+            <div style="font-size:12px;color:#555555;margin-top:3px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Founder · 3D Virtuals</div>
+            <div style="font-size:12px;color:#555555;margin-top:2px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">Côte Saint-Luc, Montréal</div>
+          </td>
+          <td align="right" style="vertical-align:top;">
+            <div style="margin-bottom:5px;"><a href="https://3dvirtual.space" style="font-size:12px;color:#4ade80;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">🌐 3dvirtual.space</a></div>
+            <div style="margin-bottom:5px;"><a href="tel:+15149191875" style="font-size:12px;color:#888888;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">📞 (514) 919-1875</a></div>
+            <div><a href="mailto:info@3dvirtual.space" style="font-size:12px;color:#888888;text-decoration:none;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">✉ info@3dvirtual.space</a></div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding-top:16px;border-top:1px solid #1f1f1f;margin-top:16px;">
+            <div style="font-size:11px;color:#333333;text-align:center;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;">© 2026 3D Virtuals · 6565 Kildare, Côte Saint-Luc, Montréal, QC · <a href="mailto:info@3dvirtual.space" style="color:#333333;text-decoration:none;">Unsubscribe</a></div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+</table>
+</td></tr>
+</table>
+
+</body>
+</html>`;
+}
+
 // ── EmailJS ──
 emailjs.init('_XQgHvxruQucYAX9p');
 
@@ -965,7 +1088,7 @@ async function sendToClient() {
       from_name:   '3D Virtual',
       reply_to:    'info@3dvirtual.space',
       subject:     'Enhance your listing at ' + (document.getElementById('f_address').value || '{Address}') + ' | Améliorez votre inscription au ' + (document.getElementById('f_address').value || '{Address}'),
-      message:     `<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.8;color:#222222;max-width:640px;">${lastGenerated}</div>`,
+      message:     buildEmailHtml(lastGenerated, document.getElementById('f_name').value),
       client_name: document.getElementById('f_name').value,
       address:     document.getElementById('f_address').value,
       phone:       phoneField ? phoneField.value : '',
